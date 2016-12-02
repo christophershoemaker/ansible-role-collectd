@@ -7,7 +7,11 @@ LoadPlugin network
 
 <Plugin network>
 {% if collectd_server in ansible_all_ipv4_addresses %}
-  Listen "{{ collectd_server }}"{%if collectd_server_port is defined %} "{{ collectd_server_port }}"{% endif %}
+  {% if collectd_localhost_forwarder %}
+    Server "{{ collectd_server }}"{%if collectd_server_port is defined %} "{{ collectd_server_port }}"{% endif %}
+  {% else %}
+    Listen "{{ collectd_server }}"{%if collectd_server_port is defined %} "{{ collectd_server_port }}"{% endif %}
+  {% endif %}
 {% else %}
   Server "{{ collectd_server }}"{%if collectd_server_port is defined %} "{{ collectd_server_port }}"{% endif %}
 {% endif %}
