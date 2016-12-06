@@ -37,3 +37,11 @@
     validate: "collectd -t -C %s"
   notify: restart collectd
   tags: collectd
+
+- name: Install cpu configuration file
+  template:
+    src: etc_collectd.d_cpu.conf.j2
+    dest: "{{ collectd_include_dir }}/cpu.conf"
+    validate: "collectd -t -C %s"
+  notify: restart collectd
+  tags: collectd

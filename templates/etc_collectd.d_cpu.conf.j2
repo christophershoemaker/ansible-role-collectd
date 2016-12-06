@@ -1,0 +1,23 @@
+# Config file for Collectd plugin cpu. This specifies whether this host
+# behaves like a server or a client
+#
+# {{ ansible_managed }}
+
+LoadPlugin cpu
+
+{% for cp in cpu_properties %}
+<Plugin cpu>
+{% for key,value in cp|dictsort %}
+
+{% if value|string == 'True' or value|string == 'False' %}
+  {{ key }} = {{ value|bool|lower }}
+{% elif value is number %}
+  {{ key }} = {{ value }}
+{% elif value is string %}
+  {{ key }} = "{{ value }}"
+{% elif value is iterable and value is not mapping %}
+  {{ key }} = [ "{{ value|join('", "') }}" ]
+{% endif %}
+{% endfor %}
+</Plugin>
+{% endfor %}
